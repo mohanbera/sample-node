@@ -1,6 +1,7 @@
-const Joi = require('joi');
 const express = require('express');
 const logger = require('./middlewares/logger');
+const courses = require('./routes/courses');
+const authors = require('./routes/authors');
 const app = express();
 
 // to set env, 
@@ -22,28 +23,15 @@ app.use(logger);
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    res.status(200).send("Hello World!!! ;)");
+  res.status(200).send("Hello World!!! ;)");
 });
 
-app.get('/api/customers', (req, res) => {
-  console.log("Inside api/customers");
-  res.send('ok');
-})
+// all routes for /api/course will go to routes/courses.js
+app.use('/api/courses', courses);
 
-app.post('/api/info', (req, res) => {
-  // first perform input validation
-  const schema = Joi.object({
-    name: Joi.string().required().min(5),
-    id: Joi.number().required().greater(100)
-  });
-  const result = schema.validate(req.body);
-  if(result.error) {
-    // ideal to send bad request
-    res.status(400).send(result.error.details[0].message);
-    return;
-  }
-  res.send("Thank you, I got all required data");
-});
+// all routes for /api/authors will got to routes/authors.js
+app.use('/api/authors', authors)
+
 
 //const PORT = process.env.PORT || 3000;
 app.listen(3000);

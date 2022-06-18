@@ -1,3 +1,4 @@
+// it contains the normal node http module 
 const http = require('http');
 
 const server = http.createServer((req, res) => {
